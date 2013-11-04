@@ -2,9 +2,12 @@
 
 import os
 import tempfile
+from collections import namedtuple
 
-toSend=["radargun","wpm"]
-nodesFile="~/nodes_list"
+ToMove = namedtuple("ToMove",['replace','new'])
+
+toSend=[("../radargun/target/distribution/RadarGun-1.1.0-SNAPSHOT","radargun"),("../wpm","wpm")]
+nodesFile="~/node_list"
 
 def getPaths(root):
     for dirname, dirnames, filenames in os.walk(root):
@@ -20,36 +23,21 @@ def transformPaths(paths):
     for p in paths:
         yield os.path.join("~",p)
 
-def scpToNodes(nodesFile,paths,transformedPaths):
-    with tempfile.NamedTemporaryFile() as local:
-        with tempfile.NamedTemporaryFile() as remote:
-            local.write("\n".join(paths))
-            remote.write("\n".join(transformedPaths))
-            local.flush()
-            remote.flush()
-            command=" ".join(["parallel-scp -h",nodesFile,local.name,remote.name])
-            print "executing: ",command
-            os.system(command)
+def replacePaths(paths,toSend):
+    for i in paths:
+        for j in toSend:
+            if i.startswith(j[1]):
+                yield (i,i.replace(j[1],j[0],1))
+                continue
+
                     
-def mkdirFilesOnNodes(nodesFile,folders):
-    command=" ".join(["parallel-ssh -h",nodesFile,'"mkdir -p'," ".join(folders),'"'])
-    print "executing: ",command
-    os.system(command)
-
-
-folders=[]
-for i in toSend:
-    folders.extend(getFolders(i))
-
-folders=list(transformPaths(folders))
-
-mkdirFilesOnNodes(nodesFile,folders)
 
 paths=[]
 for i in toSend:
-    paths.extend(getPaths(i))
+    paths.extend(getPaths(i[1]))
 
 transformedPaths=[]
-transformedPaths.extend(transformPaths(paths))
+transformedPaths.extend(replacePaths(paths,toSend))
 
-scpToNodes(nodesFile,paths,transformedPaths)
+print transformedPaths
+
