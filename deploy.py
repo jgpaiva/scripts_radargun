@@ -12,7 +12,7 @@ def getPaths(root):
             yield os.path.join(dirname, filename)
 
 def getFolders(root):
-    for dirname, dirnames, filenames in os.walk('.'):
+    for dirname, dirnames, filenames in os.walk(root):
         for subdirname in dirnames:
             yield os.path.join(dirname, subdirname)
 
@@ -27,16 +27,21 @@ def scpToNodes(nodesFile,paths,transformedPaths):
             remote.write("\n".join(transformedPaths))
             local.flush()
             remote.flush()
-            os.system(" ".join("parallel-scp -h",nodesFile,local.name,remote.name)
+            command=" ".join(["parallel-scp -h",nodesFile,local.name,remote.name])
+            print "executing: ",command
+            os.system(command)
                     
 def mkdirFilesOnNodes(nodesFile,folders):
+    command=" ".join(["parallel-ssh -h",nodesFile,'"mkdir -p'," ".join(folders),'"'])
+    print "executing: ",command
+    os.system(command)
 
 
 folders=[]
 for i in toSend:
     folders.extend(getFolders(i))
 
-folders=list(transformedPaths(folders))
+folders=list(transformPaths(folders))
 
 mkdirFilesOnNodes(nodesFile,folders)
 
