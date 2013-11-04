@@ -6,9 +6,12 @@ from collections import namedtuple
 
 dryrun=True
 
-ToMove = namedtuple("ToMove",['replace','new'])
+ToMove = namedtuple("ToMove",['dest','source'])
 
 def getPaths(root):
+    if os.path.isfile(root):
+        yield root
+
     for dirname, dirnames, filenames in os.walk(root):
         for filename in filenames:
             yield os.path.join(dirname, filename)
@@ -25,12 +28,12 @@ def transformPaths(paths):
 def replacePaths(paths,replacements):
     for aFile in paths:
         for replacement in replacements:
-            if aFile.startswith(replacement.new):
-                yield ToMove(new=aFile,replace=aFile.replace(replacement.new,replacement.replace,1))
+            if aFile.startswith(replacement.source):
+                yield ToMove(source=aFile,dest=aFile.replace(replacement.source,replacement.dest,1))
                 continue
 
 def copyFile(source,dest):
-    command=" ".join(["mv",source,dest])
+    command=" ".join(["cp",source,dest])
     if dryrun:
         print command
     else:
@@ -39,7 +42,7 @@ def copyFile(source,dest):
 def createCommand(toSend):
     paths=[]
     for i in toSend:
-        paths.extend(getPaths(i.new))
+        paths.extend(getPaths(i.source))
 
     transformedPaths=[]
     transformedPaths.extend(replacePaths(paths,toSend))
@@ -55,15 +58,16 @@ def scpFolder(nodesList,source,target):
 
 #############################################
 
-toSend=[ToMove(replace="../radargun/target/distribution/RadarGun-1.1.0-SNAPSHOT/",new="radargun/"),
-        ToMove(replace="../wpm/",new="wpm/")]
+toSend=[ToMove(dest="../radargun/target/distribution/RadarGun-1.1.0-SNAPSHOT/",source="radargun/"),
+        ToMove(dest="../wpm/",source="wpm/"),
+        ToMove(dest="../beforeBenchmark.sh",source="beforeBenchmark.sh")]
 
 nodesList="~/node_list"
 
 transformedPaths=createCommand(toSend)
 
 for i in transformedPaths:
-    copyFile(i.new,i.replace)
+    copyFile(i.source,i.dest)
 
 for i in toSend:
-    scpFolder(nodesList,i.replace,"~/"+i.new)
+    scpFolder(nodesList,i.dest,"~/"+i.source)
