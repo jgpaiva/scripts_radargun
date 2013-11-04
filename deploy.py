@@ -4,7 +4,7 @@ import os
 import tempfile
 from collections import namedtuple
 
-dryrun=True
+dryrun=False
 
 ToMove = namedtuple("ToMove",['dest','source'])
 
