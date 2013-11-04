@@ -4,10 +4,9 @@ import os
 import tempfile
 from collections import namedtuple
 
-ToMove = namedtuple("ToMove",['replace','new'])
+dryrun=True
 
-toSend=[("../radargun/target/distribution/RadarGun-1.1.0-SNAPSHOT","radargun"),("../wpm","wpm")]
-nodesFile="~/node_list"
+ToMove = namedtuple("ToMove",['replace','new'])
 
 def getPaths(root):
     for dirname, dirnames, filenames in os.walk(root):
@@ -23,21 +22,48 @@ def transformPaths(paths):
     for p in paths:
         yield os.path.join("~",p)
 
-def replacePaths(paths,toSend):
-    for i in paths:
-        for j in toSend:
-            if i.startswith(j[1]):
-                yield (i,i.replace(j[1],j[0],1))
+def replacePaths(paths,replacements):
+    for aFile in paths:
+        for replacement in replacements:
+            if aFile.startswith(replacement.new):
+                yield ToMove(new=aFile,replace=aFile.replace(replacement.new,replacement.replace,1))
                 continue
 
-                    
+def copyFile(source,dest):
+    command=" ".join(["mv",source,dest])
+    if dryrun:
+        print command
+    else:
+        os.system(command)
 
-paths=[]
+def createCommand(toSend):
+    paths=[]
+    for i in toSend:
+        paths.extend(getPaths(i.new))
+
+    transformedPaths=[]
+    transformedPaths.extend(replacePaths(paths,toSend))
+
+    return transformedPaths
+
+def scpFolder(nodesList,source,target):
+    command=" ".join(["parallel-scp -r -h",nodesList,source,target])
+    if dryrun:
+        print command
+    else:
+        os.system(command)
+
+#############################################
+
+toSend=[ToMove(replace="../radargun/target/distribution/RadarGun-1.1.0-SNAPSHOT/",new="radargun/"),
+        ToMove(replace="../wpm/",new="wpm/")]
+
+nodesList="~/node_list"
+
+transformedPaths=createCommand(toSend)
+
+for i in transformedPaths:
+    copyFile(i.new,i.replace)
+
 for i in toSend:
-    paths.extend(getPaths(i[1]))
-
-transformedPaths=[]
-transformedPaths.extend(replacePaths(paths,toSend))
-
-print transformedPaths
-
+    scpFolder(nodesList,i.replace,"~/"+i.new)
