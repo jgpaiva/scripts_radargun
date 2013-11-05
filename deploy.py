@@ -41,9 +41,8 @@ def replacePaths(paths,replacements):
 
 def copyFile(source,dest):
     command=" ".join(["cp",source,dest])
-    if dryrun:
-        print command
-    else:
+    print command
+    if not dryrun:
         os.system(command)
 
 def createCommand(toSend):
