@@ -8,6 +8,13 @@ dryrun=False
 
 ToMove = namedtuple("ToMove",['dest','source'])
 
+toSend=[ToMove(dest="../radargun/target/distribution/RadarGun-1.1.0-SNAPSHOT/",source="radargun/"),
+        ToMove(dest="../wpm/",source="wpm/"),
+        ToMove(dest="../beforeBenchmark.sh",source="beforeBenchmark.sh") ]
+
+nodesList="~/node_list"
+
+
 def getPaths(root):
     if os.path.isfile(root):
         yield root
@@ -50,24 +57,29 @@ def createCommand(toSend):
     return transformedPaths
 
 def scpFolder(nodesList,source,target):
+    command=" ".join(["parallel-ssh -h",nodesList,"rm -rf",target])
+    print command
+    if not dryrun:
+        os.system(command)
     command=" ".join(["parallel-scp -r -h",nodesList,source,target])
-    if dryrun:
-        print command
-    else:
+    print command
+    if not dryrun:
         os.system(command)
 
-#############################################
+def deploy():
+    transformedPaths=createCommand(toSend)
 
-toSend=[ToMove(dest="../radargun/target/distribution/RadarGun-1.1.0-SNAPSHOT/",source="radargun/"),
-        ToMove(dest="../wpm/",source="wpm/"),
-        ToMove(dest="../beforeBenchmark.sh",source="beforeBenchmark.sh")]
+    for i in transformedPaths:
+        copyFile(i.source,i.dest)
 
-nodesList="~/node_list"
+    print "config files are now in place"
 
-transformedPaths=createCommand(toSend)
+    for i in toSend:
+        scpFolder(nodesList,i.dest,"~/"+i.source)
 
-for i in transformedPaths:
-    copyFile(i.source,i.dest)
+    scpFolder(nodesList,"ml","/tmp/ml") #HACK
 
-for i in toSend:
-    scpFolder(nodesList,i.dest,"~/"+i.source)
+    print "all files transferred"
+    
+if __name__ == "__main__":
+    deploy()
