@@ -3,7 +3,7 @@
 import os
 import deploy
 
-numMachines = 10
+numMachines = 40
 
 dryrun=False
 deploy.dryrun=dryrun

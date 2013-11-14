@@ -17,7 +17,7 @@
             partialReplication="true"/>
       <TpccPopulation
             preloadedFromDB="false"
-            numWarehouses="10"
+            numWarehouses="40"
             cLastMask="0"
             olIdMask="0"
             cIdMask="0"
@@ -29,12 +29,12 @@
       <TpccBenchmark
             statsSamplingInterval="0"
             numOfThreads="2"
-            perThreadSimulTime="2000"
+            perThreadSimulTime="3800"
             arrivalRate="0"
-            localityProbability="100"
+            localityProbability="90"
             accessSameWarehouse="true"
             paymentWeight="0"
-            warehouseOffset="1"
+            warehouseOffset="0"
             orderStatusWeight="100"/>
       <CacheSize
             statName="CACHE_SIZE_AFTER_BENCH" />
@@ -42,12 +42,25 @@
       <TpccBenchmark
             statsSamplingInterval="0"
             numOfThreads="2"
-            perThreadSimulTime="2000"
+            perThreadSimulTime="3800"
             arrivalRate="0"
-            localityProbability="100"
+            localityProbability="90"
             accessSameWarehouse="true"
-            warehouseOffset="2"
             paymentWeight="0"
+            warehouseOffset="-1"
+            orderStatusWeight="100"/>
+      <CacheSize
+            statName="CACHE_SIZE_AFTER_BENCH" />
+      <CsvReportGeneration/>
+      <TpccBenchmark
+            statsSamplingInterval="0"
+            numOfThreads="2"
+            perThreadSimulTime="3800"
+            arrivalRate="0"
+            localityProbability="90"
+            accessSameWarehouse="true"
+            paymentWeight="0"
+            warehouseOffset="3"
             orderStatusWeight="100"/>
       <CacheSize
             statName="CACHE_SIZE_AFTER_BENCH" />

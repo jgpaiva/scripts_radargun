@@ -3,7 +3,7 @@
 LOG=~/log.out
 FIRST_SLEEP=10
 SLEEP=60
-VM=172.31.0.32:9998
+VM=172.31.0.94:9998
 round=0
 
 log() {
@@ -52,7 +52,7 @@ sblock
 
 block
 
-for i in {1..120}; do
+for i in {1..220}; do
 dataplacement
 block
 done
