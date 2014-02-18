@@ -15,55 +15,25 @@
       <ClusterValidation
             passiveReplication="false"
             partialReplication="true"/>
-      <TpccPopulation
-            preloadedFromDB="false"
-            numWarehouses="40"
-            cLastMask="0"
-            olIdMask="0"
-            cIdMask="0"
-            threadParallelLoad="true"
-            batchLevel="25"
-            numLoaderThreads="4"/>
+      <ClearCluster />
+      <WebSessionWarmup
+            passiveReplication="false"
+            numberOfKeys="10000"
+            sizeOfValue="1000"
+            numOfThreads="2"
+            transactionSize="1"
+            />
+      <ResetStats />
+      <WebSessionBenchmark
+            perThreadSimulTime="1000"
+            writeTxWorkload="10,10;10,10"
+            readTxWorkload="20"
+            noContention="false"
+            writeTransactionPercentage="1"
+            coordinatorParticipation="true"
+            />
       <CacheSize
             statName="CACHE_SIZE_BEFORE_BENCH" />
-      <TpccBenchmark
-            statsSamplingInterval="0"
-            numOfThreads="2"
-            perThreadSimulTime="3800"
-            arrivalRate="0"
-            localityProbability="90"
-            accessSameWarehouse="true"
-            paymentWeight="0"
-            warehouseOffset="0"
-            orderStatusWeight="100"/>
-      <CacheSize
-            statName="CACHE_SIZE_AFTER_BENCH" />
-      <CsvReportGeneration/>
-      <TpccBenchmark
-            statsSamplingInterval="0"
-            numOfThreads="2"
-            perThreadSimulTime="3800"
-            arrivalRate="0"
-            localityProbability="90"
-            accessSameWarehouse="true"
-            paymentWeight="0"
-            warehouseOffset="-1"
-            orderStatusWeight="100"/>
-      <CacheSize
-            statName="CACHE_SIZE_AFTER_BENCH" />
-      <CsvReportGeneration/>
-      <TpccBenchmark
-            statsSamplingInterval="0"
-            numOfThreads="2"
-            perThreadSimulTime="3800"
-            arrivalRate="0"
-            localityProbability="90"
-            accessSameWarehouse="true"
-            paymentWeight="0"
-            warehouseOffset="3"
-            orderStatusWeight="100"/>
-      <CacheSize
-            statName="CACHE_SIZE_AFTER_BENCH" />
       <CsvReportGeneration/>
    </benchmark>
    <products>
