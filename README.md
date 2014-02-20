@@ -1,3 +1,1 @@
-VM data for autoplacer
-========
-
+Scripts for running radargun + infinispan
