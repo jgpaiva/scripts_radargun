@@ -129,6 +129,21 @@
 
     <category name="org.infinispan.cacheviews.PendingCacheViewChanges">
         <priority value="INFO"/>
+
+    <category name="org.infinispan.dataplacement.replication">
+        <priority value="DEBUG"/>
+    </category>
+
+    <category name="org.infinispan.transaction.tm">
+        <priority value="FATAL"/>
+    </category>
+
+    <category name="org.infinispan.transaction.TransactionCoordinator">
+        <priority value="FATAL"/>
+    </category>
+
+    <category name="org.infinispan.interceptors.InvocationContextInterceptor">
+        <priority value="FATAL"/>
     </category>
 
    <!-- Here goes the root -->
