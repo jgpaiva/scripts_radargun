@@ -7,7 +7,16 @@ then
 fi
 
 for i in `cat ~/slaves`; do mkdir -p $FOLDERNAME/$i; scp $i:~/radargun/* $FOLDERNAME/$i; done
-cp -r ~/wpm/log/csv/ $FOLDERNAME/
+
+for i in `cat ~/slaves`; do mkdir -p $FOLDERNAME/wpmlogs/$i; scp $i:~/wpm/*.log $FOLDERNAME/wpmlogs/$i; done
+cp ~/wpm/*.log $FOLDERNAME/wpmlogs
+
+mkdir -p $FOLDERNAME/wpm
+cp -r ~/wpm/log/* $FOLDERNAME/wpm/
+
+mkdir -p $FOLDERNAME/radargunreports
+cp -r ~/radargun/reports/* $FOLDERNAME/radargunreports
+
 mkdir -p $FOLDERNAME/config
 cp -r wpm $FOLDERNAME/config
 cp -r radargun $FOLDERNAME/config

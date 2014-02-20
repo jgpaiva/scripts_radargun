@@ -3,23 +3,27 @@
 import os
 import deploy
 
-numMachines = 40
+numMachines = 4
 
-dryrun=False
-deploy.dryrun=dryrun
+dryrun = False
+deploy.dryrun = dryrun
+
+
+def runCommand(command):
+    print command
+    if not dryrun:
+        os.system(command)
+
 
 def clean():
-    command= "./clean.sh"
-    print command
-    if not dryrun:
-        os.system(command)
+    runCommand("./clean.sh")
+
 
 def start():
-    command=" ".join(["grep -R 1099 ~/wpm/;cd ~/wpm;./log_service.sh stop;./log/clean.sh;cd ~/radargun;./bin/benchmark.sh -i",str(numMachines),"`cat ~/slaves`;cd ~/wpm;sleep 5;./log_service.sh start"])
-    command='bash -c "'+command+'"'
-    print command
-    if not dryrun:
-        os.system(command)
+    command = "cd ~/radargun;./bin/benchmark.sh -i \
+{0} `cat ~/slaves`;".format(numMachines)
+    command = 'bash -c "' + command + '"'
+    runCommand(command)
 
 clean()
 deploy.deploy()
