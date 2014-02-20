@@ -123,6 +123,14 @@
         <priority value="INFO"/>
     </category>
 
+    <category name="org.infinispan.cacheviews.CacheViewsManagerImpl">
+        <priority value="INFO"/>
+    </category>
+
+    <category name="org.infinispan.cacheviews.PendingCacheViewChanges">
+        <priority value="INFO"/>
+    </category>
+
    <!-- Here goes the root -->
    <root>
       <priority value="INFO"/>
