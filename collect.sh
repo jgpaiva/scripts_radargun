@@ -6,9 +6,9 @@ then
     FOLDERNAME="../results".`date "+%Y%m%d.%H%M%S"`
 fi
 
-for i in `cat ~/slaves`; do mkdir -p $FOLDERNAME/$i; scp $i:~/radargun/* $FOLDERNAME/$i; done
+for i in `cat ~/slaves`; do mkdir -p $FOLDERNAME/$i; scp -C $i:~/radargun/* $FOLDERNAME/$i; done
 
-for i in `cat ~/slaves`; do mkdir -p $FOLDERNAME/wpmlogs/$i; scp $i:~/wpm/*.log $FOLDERNAME/wpmlogs/$i; done
+for i in `cat ~/slaves`; do mkdir -p $FOLDERNAME/wpmlogs/$i; scp -C $i:~/wpm/*.log $FOLDERNAME/wpmlogs/$i; done
 cp ~/wpm/*.log $FOLDERNAME/wpmlogs
 
 mkdir -p $FOLDERNAME/wpm
