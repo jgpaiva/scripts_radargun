@@ -25,14 +25,14 @@
             />
       <ResetStats />
       <WebSessionBenchmark
-            perThreadSimulTime="1000"
+            perThreadSimulTime="300"
             writeTxWorkload="10,10;10,10"
             readTxWorkload="20"
             noContention="false"
-            writeTransactionPercentage="1"
+            writeTransactionPercentage="30"
             coordinatorParticipation="true"
             numOfThreads="1"
-            waitTime="1000"
+            opsPerSecond="200"
             />
       <CacheSize
             statName="CACHE_SIZE_BEFORE_BENCH" />
