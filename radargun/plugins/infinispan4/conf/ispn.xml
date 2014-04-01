@@ -61,12 +61,12 @@
                 versioningScheme="SIMPLE" />
         <dataPlacement
                 enabled="true"
-                objectReplicationLookupFactory="org.infinispan.dataplacement.replication.HashMapObjectReplicationLookupFactory"
-                maxNumberOfKeysToRequest="100">
+                objectLookupFactory="org.infinispan.dataplacement.c50.C50MLObjectLookupFactory"
+                maxNumberOfKeysToRequest="1000">
             <properties>
                 <property
                         name="keyFeatureManager"
-                        value="org.radargun.cachewrappers.RadargunKeyFeatureManager"
+                        value="org.radargun.cachewrappers.TpccKeyFeaturesManager"
                         />
                 <property
                         name="location"
