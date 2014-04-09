@@ -3,7 +3,7 @@
 LOG=~/log.out
 FIRST_SLEEP=10
 SLEEP=60
-VM=172.31.0.148:9998
+VM=172.31.0.136:9998
 round=0
 
 log() {
